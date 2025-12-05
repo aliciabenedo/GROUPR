@@ -1,5 +1,3 @@
-package hotelapp;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -12,17 +10,19 @@ import java.util.ArrayList;
  */
 public class RoomSaver {
     
+    // This stores the same room objects used in the GUI
     private ArrayList<Room> rooms;
     
     //Constructor takes the current list of rooms 
     public RoomSaver(ArrayList<Room>rooms){
         this.rooms = rooms;
     }
-    // This method builds a summary string about the current rooms
-    public String buildSaveSummary(){
-        int totalRooms = rooms.size();
-        int availableCount =0;
+    // This method builds a summary string about the current rooms when you ress the save button
+    public String buildSaveSummary(){ 
+        int totalRooms = rooms.size();// total rooms in ArrayList
+        int availableCount =0; // counter for Available rooms
         
+        // Loop through rooms to count how many are available 
         for (Room r : rooms){
             if (r.isAvailable()){
                 availableCount++;
@@ -31,15 +31,15 @@ public class RoomSaver {
         }
         
         int notAvailable = totalRooms - availableCount;
+        
+        //Return the summary text 
         return "Total rooms:" +totalRooms+
                "\nAvailable rooms:" +availableCount+
                 "\nNot available:" +(totalRooms - availableCount);
                 
     }
 
-    String buldsSaveSummary() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+   
 }
     
+
