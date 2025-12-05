@@ -1,11 +1,9 @@
 package hotelapp;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridLayout; 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -27,61 +25,30 @@ public class RoomManagementGUI extends JFrame {
      */
     public RoomManagementGUI() {
         initComponents();
+        //Set window title, size and close
         setTitle("Room Management");
         setSize(900,600);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);  
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        //ArrayList is used to store multiple Romm objects 
-        rooms = new ArrayList<>();
-        
+        //Use the shared room list so data is keptt between screens
+        rooms = HotelData.rooms;
+         
+        //Gets the Table model from the JTable
         tableModel = (DefaultTableModel) tablemodel.getModel();
+        //Romoves any defaults rows from the table
         tableModel.setRowCount(0);
         
-        loadSampleData();
+      //If no rooms have been added yet, it loads some sample rooms 
+      //Otherwise, it shows the existing rooms in the table
+      if (rooms.isEmpty()){
+          loadSampleData();
+         }else{
+          updateTable();
+      }
     
     }
     
-    private void buildGUI(){
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        
-        //Title
-        JLabel titleLabel = new JLabel("Room Management" , JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial",Font.BOLD,20));
-        mainPanel.add(titleLabel,BorderLayout.NORTH);
-        
-        //Table for rooms
-        String[] columns = {"Room ID", "Type", "Price", "Available"};
-        tableModel = new DefaultTableModel(columns,0);
-        tablemodel = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(tablemodel);
-                mainPanel.add(scrollPane,BorderLayout.CENTER);
-                
-                //Button Panel
-                JPanel buttonPanel = new JPanel(new FlowLayout());
-                
-                JButton addBtn = new JButton("Add Room");
-                JButton editBtn = new JButton("Edit Room");
-                JButton deleteBtn = new JButton ("Delete Room");
-                JButton searchBtn = new JButton ("Search Room");
-                JButton toggleBtn = new JButton (" Toggle Availability");
-                JButton backBtn = new JButton ("Back to Main");
-                
-            
-                buttonPanel.add(addBtn);
-                buttonPanel.add(editBtn);
-                buttonPanel.add(deleteBtn);
-                buttonPanel.add(searchBtn);  
-                buttonPanel.add(toggleBtn);
-                buttonPanel.add(backBtn);  
-                    
-                mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-                
-                add(mainPanel);
-                
-                
-                
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -183,7 +150,7 @@ public class RoomManagementGUI extends JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BackToMainbtn)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,13 +159,13 @@ public class RoomManagementGUI extends JFrame {
                                 .addGap(36, 36, 36)
                                 .addComponent(EditBtn))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ToggleAvailabilityBtn))
                                 .addGap(18, 18, 18)
-                                .addComponent(Deletebtn))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ToggleAvailabilityBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BackToMainbtn)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Deletebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(saveBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54))))
@@ -222,69 +189,79 @@ public class RoomManagementGUI extends JFrame {
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ToggleAvailabilityBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BackToMainbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                            .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addComponent(BackToMainbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>                        
 
     private void addbtnActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        // Creates a new Room object using user input and adds it to the ArrayList.
-        // After adding, the table is refreshed so the user can see new room.
+        // Opens a small pop up window (dialog) to enter new room details
         JDialog addDialog = new JDialog(this, "Add New Room",true);
         addDialog.setSize(400,250);
         addDialog.setLocationRelativeTo(this);
         
+        //Text fields for room details
         JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         JTextField idField = new JTextField();
         JTextField typeField = new JTextField();
         JTextField priceField = new JTextField();
         JCheckBox availableCheckbox = new JCheckBox("Available", true);
         
-        
+        //Add labels and Text Fields to the form
         formPanel.add(new JLabel("Room ID:"));
         formPanel.add(idField);
-         formPanel.add(new JLabel("Room type:"));
+        formPanel.add(new JLabel("Room type:"));
         formPanel.add(typeField);
         formPanel.add(new JLabel("Price:"));
         formPanel.add(priceField);
         formPanel.add(new JLabel("Available:"));
         formPanel.add(availableCheckbox);
         
+        //Save and Cancel button for the dialog 
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(saveBtn);
         buttonPanel.add(cancelBtn);
         
+        //Adds form and buttons into dialog
         addDialog.setLayout(new BorderLayout());
         addDialog.add(formPanel, BorderLayout.CENTER);
         addDialog.add(buttonPanel, BorderLayout.SOUTH);
         
+        //Save button logic for adding a new room
         saveBtn.addActionListener(new ActionListener(){
          @Override
          public void actionPerformed(ActionEvent e){
          try{
+             //Read user input
              String roomId = idField.getText().trim();
              String type = typeField.getText();
              double price = Double.parseDouble(priceField.getText());
              boolean available = availableCheckbox.isSelected();
              
+             //Creates new Room and add to ArrayList
              Room newRoom = new Room(roomId, type, price, available);
              rooms.add(newRoom);
+             
+             //Refresh table to show new room
              updateTable();
+             
+             //Close the dialog
              addDialog.dispose();
              JOptionPane.showMessageDialog(RoomManagementGUI.this, "Room added successfully!");
              
          }catch (NumberFormatException ex){
+             //if price is not a number
              JOptionPane.showMessageDialog(RoomManagementGUI.this, "Please enter a valid price");
          }
          }
         });
-        
+        //Cancel button closes the dialog
         cancelBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -298,44 +275,45 @@ public class RoomManagementGUI extends JFrame {
     }                                      
 
     private void DeletebtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // Removes the selected Room object from ArrayList.
-        //After deleting it updateTable() Refreshes the Jtable 
+       //Get selected row from JTable 
         int selectedRow = tablemodel.getSelectedRow();
         if (selectedRow >=0){
             rooms.remove(selectedRow);
+            //Refresh JTable
             updateTable();
             JOptionPane.showMessageDialog(this, "Room deleted successfully!");
           }else{
           JOptionPane.showMessageDialog(this, "Please select a room to a delete");
           
-         ;
+         
         }
     }                                         
 
     private void EditBtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        // Allows the user to modify any room object.
-        // The selected Room is updated directly inside the ArrayList
-        // and the the table is refreshed to show changes
-        
+        //Check if the user selected a row 
         int selectedRow = tablemodel.getSelectedRow();
         
         if (selectedRow <0){
         JOptionPane.showMessageDialog(this, "Please select a room to edit");
         return;
         }
+        //Get the room that matches the selected row
         Room room = rooms.get(selectedRow);
         final int rowIndex = selectedRow;
         
+        //Create dialog for editing room
         JDialog editDialog = new JDialog(this,"Edit Room", true);
         editDialog.setSize(400, 250);
         editDialog.setLocationRelativeTo(this);
         
+        //Pre-filled fields with cureent room details 
         JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
         JTextField idField = new JTextField(room.getRoomID());
         JTextField typeField = new JTextField(room.getType());
-        JTextField priceField = new JTextField(String.valueOf((char) room.getPrice()));
+        JTextField priceField = new JTextField(String.valueOf(room.getPrice()));
         JCheckBox availableCheckbox = new JCheckBox("Available", room.isAvailable());
         
+
         formPanel.add(new JLabel("Room ID:"));
         formPanel.add(idField);
         formPanel.add(new JLabel("Room Type:"));
@@ -346,7 +324,7 @@ public class RoomManagementGUI extends JFrame {
         formPanel.add(availableCheckbox);
         
      
-        
+        //Save and Cancel buttons for edit 
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
         JPanel buttonPanel = new JPanel();
@@ -357,35 +335,39 @@ public class RoomManagementGUI extends JFrame {
         editDialog.add(formPanel, BorderLayout.CENTER);
         editDialog.add(buttonPanel, BorderLayout.SOUTH);
         
+        //when save button is cliscked in the edit dialog
         saveBtn.addActionListener(new ActionListener(){
          @Override
          public void actionPerformed(ActionEvent e){
          try{
+             //Get the updated room details from the input fields
              String newId = idField.getText().trim();
              String newType = typeField.getText().trim();
              String priceText = priceField.getText().trim();
              boolean newAvailable = availableCheckbox.isSelected();
-            
+            //Fields cannot be empty
              if (newId.isEmpty() || newType.isEmpty() || priceText.isEmpty()){
               JOptionPane.showMessageDialog(editDialog, "all fields are required! ");  
               return;
              }
              
              double newPrice = Double.parseDouble(priceText);
-             
+             //Checks that room ID is not alraedy used by another room
              for(int i = 0; i < rooms.size(); i ++){
-             if (i == rowIndex) continue;
+             if (i == rowIndex) continue; // skip current edited room
              if (rooms.get(i).getRoomID().equalsIgnoreCase(newId)){
              JOptionPane.showMessageDialog(editDialog, "Room ID already exist! ");
              return;
                  
              }
          }
-            
+            //Updates the Room object with new details 
              room.setRoomID(newId);
              room.setType(newType);
              room.setPrice(newPrice);
              room.setAvailable(newAvailable);
+             
+             //Refreshes the table to show update
              updateTable();
              editDialog.dispose();
              JOptionPane.showMessageDialog(RoomManagementGUI.this, "Room updated successfully!");
@@ -396,6 +378,7 @@ public class RoomManagementGUI extends JFrame {
          }
         });
         
+        //cancel edit and dialog
         cancelBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -413,6 +396,7 @@ public class RoomManagementGUI extends JFrame {
        
         int selectedRow = tablemodel.getSelectedRow();
         if (selectedRow >= 0){
+            //Flips availability from available to unavailable 
            Room room = rooms.get(selectedRow);
            room.setAvailable(!room.isAvailable());
            updateTable();
@@ -424,8 +408,10 @@ public class RoomManagementGUI extends JFrame {
     }                                                     
 
     private void SearchBtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // Searches the ArrayList for a room object woth matching ID
+        // Searches the ArrayList for a room object with matching ID
         //if found will show  room details 
+        
+        //Ask user for a room ID to search for
         String roomId = JOptionPane.showInputDialog(this,"Enter Room ID(e.g R101):");
         
         if (roomId == null || roomId.trim().isEmpty()){
@@ -435,7 +421,8 @@ public class RoomManagementGUI extends JFrame {
         boolean found = false;
         int foundIndex = -1;
         Room foundRoom = null;
-        
+       
+        //loop search through ArrayList
         for(int i = 0; i < rooms.size(); i++){
             Room r = rooms.get(i);
             if(r.getRoomID().equalsIgnoreCase(roomId.trim())){
@@ -447,6 +434,7 @@ public class RoomManagementGUI extends JFrame {
             
         }
         if (found){
+            //Highlights the matching row in the table 
             tablemodel.setRowSelectionInterval(foundIndex, foundIndex);
             JOptionPane.showMessageDialog(this,
                  "Room found:\n" +
@@ -461,26 +449,31 @@ public class RoomManagementGUI extends JFrame {
     }                                         
 
     private void BackToMainbtnActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+        //Open main page and close the screen
         new mainPageJFrame().setVisible(true);
         this.dispose();
     }                                             
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        // TODO add your handling code here:
+        //Makes sure table is up to date
         updateTable();
         
+        // Uses RoomSaver class to build a summary message
         RoomSaver saver = new RoomSaver(rooms);
-        String summary = saver.buldsSaveSummary();
+        String summary = saver.buildSaveSummary();
+        //Shows summary to the user
         JOptionPane.showMessageDialog(this, "Changes saved!" +summary);
     }                                       
     
     //Updates the Jtable by converting the ArrayList of Room Objects 
     // into rows for the table. This displays the current state of the data.
     private void updateTable(){
+        //Clears existing rows 
         tableModel.setRowCount(0);
         
+        //Add each Room as a row in the table 
         Room[] roomArray = rooms.toArray(new Room[0]);
+        //Add each room as one row in the table 
         for(Room room : roomArray){
             tableModel.addRow(new Object[]{
                       room.getRoomID(),
@@ -491,12 +484,14 @@ public class RoomManagementGUI extends JFrame {
         }
     }
     
-    //Adds initial Room objects in to the ArrayList for Testing the GUI
-    // This shows the Data
+    //Adds some examples data so the table is not empty when the app first starts 
     private void loadSampleData(){
         rooms.add(new Room("R101", "Single", 99.99, true));
         rooms.add(new Room("R102", "Double", 149.99, true));
         rooms.add(new Room("R103", "Suite", 299.99, false));
+        rooms.add(new Room("R104", "Double", 400.99, true));
+        rooms.add(new Room("R105", "Single", 129.99, true));
+        rooms.add(new Room("R106", "Suite", 200.99, false));
         updateTable();
     }
     /**
