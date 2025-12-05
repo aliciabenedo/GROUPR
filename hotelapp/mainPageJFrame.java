@@ -28,13 +28,13 @@ public class mainPageJFrame extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         GuestMBtn = new javax.swing.JButton();
-        hotelMBtn = new javax.swing.JButton();
+        RoomlMBtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("hotel management System");
+        jLabel1.setText("Hotel management System");
 
         GuestMBtn.setText("Guest Managemet");
         GuestMBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -43,16 +43,21 @@ public class mainPageJFrame extends javax.swing.JFrame {
             }
         });
 
-        hotelMBtn.setText("hotel Management");
-        hotelMBtn.addActionListener(new java.awt.event.ActionListener() {
+        RoomlMBtn.setText("Room Management");
+        RoomlMBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hotelMBtnActionPerformed(evt);
+                RoomlMBtnActionPerformed(evt);
             }
         });
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Booking Management");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("exit");
+        jButton4.setText("Exit");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -66,30 +71,30 @@ public class mainPageJFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(jLabel1))
-                    .addComponent(jButton4)
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(147, 147, 147)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(GuestMBtn)
-                            .addComponent(jButton3)
-                            .addComponent(hotelMBtn))))
-                .addContainerGap(122, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(GuestMBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(RoomlMBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(168, 168, 168)
+                        .addComponent(jLabel1)))
+                .addContainerGap(183, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(60, 60, 60)
-                .addComponent(GuestMBtn)
-                .addGap(42, 42, 42)
-                .addComponent(hotelMBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(24, 24, 24)
-                .addComponent(jButton4)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(GuestMBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(RoomlMBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -103,7 +108,7 @@ public class mainPageJFrame extends javax.swing.JFrame {
         
     }                                         
 
-    private void hotelMBtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void RoomlMBtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
         new RoomManagementGUI().setVisible(true);
         this.dispose();
@@ -112,6 +117,12 @@ public class mainPageJFrame extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
          this.dispose(); 
+    }                                        
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        BookingMenuJFrame bookingMenu = new BookingMenuJFrame();
+        bookingMenu.setVisible(true);
+        this.dispose();
     }                                        
 
     /**
@@ -151,7 +162,7 @@ public class mainPageJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton GuestMBtn;
-    private javax.swing.JButton hotelMBtn;
+    private javax.swing.JButton RoomlMBtn;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
